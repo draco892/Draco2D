@@ -1,0 +1,58 @@
+# Xcode C++ Git Ignore File
+
+# Xcode specific files
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+build/
+DerivedData/
+*.moved-aside
+*.xcscmblueprint
+
+# Xcode build folders
+# Build generated folders (when you select Build Location > Legacy)
+build/
+# Build generated folder (when you select Build Location > Custom)
+# User provides this folder name via the Xcode GUI
+*/Build/
+
+# Other Xcode temporary files
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# macOS specific
+.DS_Store
+
+# C++ specific
+*.o
+*.obj
+*.so
+*.exe
+*.a
+*.dylib
+*.dll
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Backup files
+*~
+*.swp
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
