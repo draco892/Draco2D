@@ -1,6 +1,34 @@
-# Xcode C++ Git Ignore File
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
 
-# Xcode specific files
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+CTestTestfile.cmake
+cmake_install.cmake
+install_manifest.txt
+Makefile
+compile_commands.json
+CMakeUserPresets.json
+
+# Build directories
+build/
+build-*/
+out/
+bin/
+
+# Xcode user/generated files
+DerivedData/
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+*.moved-aside
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -9,50 +37,33 @@
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-xcuserdata/
-*.xcuserstate
-*.xccheckout
-build/
-DerivedData/
-*.moved-aside
-*.xcscmblueprint
+*.hmap
 
-# Xcode build folders
-# Build generated folders (when you select Build Location > Legacy)
-build/
-# Build generated folder (when you select Build Location > Custom)
-# User provides this folder name via the Xcode GUI
+# Xcode custom build folders
 */Build/
 
-# Other Xcode temporary files
-*.hmap
-*.ipa
-*.dSYM.zip
+# Debug symbols / packaged artifacts
 *.dSYM
+*.dSYM.zip
+*.ipa
+*.app
 
-# macOS specific
-.DS_Store
-
-# C++ specific
+# C/C++ binaries and libs
 *.o
 *.obj
 *.so
-*.exe
 *.a
 *.dylib
 *.dll
+*.exe
 
-# CMake generated files
-CMakeFiles/
-CMakeCache.txt
-cmake_install.cmake
-Makefile
-
-# Backup files
+# Temporary / backups
 *~
 *.swp
-
-# Logs and temporary files
-*.log
 *.tmp
 *.temp
+*.log
+
+# Editors
+.vscode/
+.idea/
