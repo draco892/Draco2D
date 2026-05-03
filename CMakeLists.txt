@@ -12,9 +12,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(Draco2D
     src/main.cpp
+    include/errors.h
 )
 
-target_compile_features(Draco2D PRIVATE cxx_std_20)
+target_include_directories(Draco2D PRIVATE include)
 
 find_package(SDL3 REQUIRED)
 

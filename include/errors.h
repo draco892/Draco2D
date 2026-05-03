@@ -1,0 +1,9 @@
+#ifndef DRACO2D_ERRORS_H
+#define DRACO2D_ERRORS_H
+
+#define DRACO2D_NO_ERROR                0
+
+#define DRACO2D_SDL_INIT_FAILED_ERROR           1
+#define DRACO2D_SDL_CREATE_WINDOW_FAIL_ERROR    2
+
+#endif // !DRACO2D_ERRORS_H
