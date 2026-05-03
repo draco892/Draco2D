@@ -17,6 +17,8 @@ add_executable(Draco2D
 
 target_include_directories(Draco2D PRIVATE include)
 
+target_compile_features(Draco2D PRIVATE cxx_std_20)
+
 find_package(SDL3 REQUIRED)
 
 target_link_libraries(Draco2D PRIVATE SDL3::SDL3)

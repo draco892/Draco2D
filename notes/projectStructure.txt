@@ -1,0 +1,10 @@
+src/
+  main.cpp
+  Application.cpp
+  Window.cpp
+  Renderer2D.cpp
+
+include/
+  Application.hpp
+  Window.hpp
+  Renderer2D.hpp
