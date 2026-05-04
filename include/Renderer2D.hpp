@@ -1,0 +1,5 @@
+#ifndef DRACO2D_RENDER2D_H
+#define DRACO2D_RENDER2D_H
+
+#endif  // !DRACO2D_RENDER2D_H
+

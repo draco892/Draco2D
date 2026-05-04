@@ -12,7 +12,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(Draco2D
     src/main.cpp
+    src/Application.cpp
+    src/Window.cpp
+    src/Renderer2D.cpp
+    
     include/errors.h
+    include/Application.hpp
+    include/Window.hpp
+    include/Renderer2D.hpp
+    
 )
 
 target_include_directories(Draco2D PRIVATE include)
