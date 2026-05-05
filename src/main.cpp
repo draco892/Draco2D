@@ -2,14 +2,9 @@
 #include <iostream>
 
 #include "../include/Window.hpp"
+#include "../include/Renderer2D.hpp"
 
 #include "../include/errors.h"
-
-void DestroyRender(SDL_Renderer &render)
-{
-    SDL_DestroyRenderer(&render);
-    return;
-}
 
 int main()
 {
@@ -32,9 +27,9 @@ int main()
         return DRACO2D_SDL_CREATE_WINDOW_FAIL_ERROR;
     }
     
-    // Render
-    SDL_Renderer* renderer = SDL_CreateRenderer(window.getWindow(), nullptr);
-    if (!renderer)
+    // Renderer
+    Renderer2D renderer(window.getWindow());
+    if (!renderer.getRenderer())
     {
         std::cerr << "SDL_CreateRenderer failed: " << SDL_GetError() << '\n';
         return 1;
@@ -53,11 +48,10 @@ int main()
                 running = false;
             }
         }
-        SDL_SetRenderDrawColor(renderer, 18, 18, 24, 255);
-        SDL_RenderClear(renderer);
-        SDL_RenderPresent(renderer);
+        SDL_SetRenderDrawColor(renderer.getRenderer(), 18, 18, 24, 255);
+        SDL_RenderClear(renderer.getRenderer());
+        SDL_RenderPresent(renderer.getRenderer());
     }
     
-    DestroyRender(*renderer);
     return DRACO2D_NO_ERROR;
 }
