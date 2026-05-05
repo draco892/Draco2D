@@ -4,8 +4,6 @@
 
 Window::~Window()
 {
-    if (!_window)
-    {
-        SDL_Quit();
-    }
+    SDL_DestroyWindow(_window);
+    SDL_Quit();
 }
