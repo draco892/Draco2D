@@ -8,6 +8,7 @@
 
 int main()
 {
+    // Amo il mio gechino <3
     // Init SDL check
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
