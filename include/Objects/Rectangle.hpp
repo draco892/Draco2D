@@ -11,7 +11,12 @@ public:
     /**
      * @brief Constructs a new Rectangle instance with default dimensions.
      */
-    Rectangle();
+    Rectangle(const float x = 470.f,
+              const float y = 285.f,
+              const float w = 300.f,
+              const float h = 150.f)
+        : _rect{x, y, w, h}
+    {}
 
     /**
      * @brief Destructor for the Rectangle class.

@@ -11,7 +11,11 @@ public:
     /**
      * @brief Constructs a new Triangle instance with default vertices.
      */
-    Triangle();
+    Triangle(const SDL_FPoint topVertex = {640.0f, 100.0f},
+             const SDL_FPoint botLeftVertex = {240.0f, 520.0f},
+             const SDL_FPoint botRightVertex = {1040.0f, 520.0f})
+        : _vertices{topVertex, botLeftVertex, botRightVertex, topVertex}
+    {}
 
     /**
      * @brief Destructor for the Triangle class.

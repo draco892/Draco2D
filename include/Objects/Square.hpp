@@ -11,7 +11,11 @@ public:
     /**
      * @brief Constructs a new Square instance with default dimensions.
      */
-    Square();
+    Square(const float x = 540.f,
+           const float y = 260.f,
+           const float l = 200.f)
+        : _rect{x, y, l, l}
+    {}
 
     /**
      * @brief Destructor for the Square class.
