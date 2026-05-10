@@ -3,6 +3,27 @@
 
 #include "../Base/BaseObject.hpp"
 
+class Rectangle : public BaseObject
+{
+    SDL_FRect _rect;
 
+public:
+    /**
+     * @brief Constructs a new Rectangle instance with default dimensions.
+     */
+    Rectangle();
+
+    /**
+     * @brief Destructor for the Rectangle class.
+     */
+    ~Rectangle() override = default;
+
+    /**
+     * @brief Renders the rectangle outline using the SDL3 renderer API.
+     *
+     * @param renderer Pointer to the SDL renderer used to draw the rectangle.
+     */
+    void render(SDL_Renderer* renderer) const override;
+};
 
 #endif  // !DRACO2D_OBJECT_RECTANGLE_H

@@ -3,10 +3,12 @@
 
 #include <SDL3/SDL.h>
 #include <string>
+#include <vector>
+#include <memory>
 
 #include "Window.hpp"
 #include "Renderer2D.hpp"
-#include "errors.h"
+#include "Base/BaseObject.hpp"
 
 /**
  * @brief Main application class for managing the game loop and resources.
@@ -32,6 +34,11 @@ class Application
      * @brief Flag indicating whether the application is currently running.
      */
     bool _running;
+
+    /**
+     * @brief Collection of drawable objects
+     */
+    std::vector<std::unique_ptr<BaseObject>> _objects;
 
 public:
     
@@ -82,6 +89,15 @@ private:
      * Destroys the renderer and window, and quits SDL.
      */
     void Cleanup();
+
+    /**
+     * @brief Renders all drawable objects in the application.
+     *
+     * Iterates through each object and calls its render method.
+     *
+     * @param renderer The SDL_Renderer to render onto.
+     */
+    void Render(SDL_Renderer* renderer);
 };
 
 #endif  // !DRACO2D_APPLICATION_H

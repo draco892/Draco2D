@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../include/Application.hpp"
+#include "../include/errors.h"
 
 int main()
 {

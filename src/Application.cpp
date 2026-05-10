@@ -1,4 +1,9 @@
 #include "../include/Application.hpp"
+#include "../include/errors.h"
+
+#include "../include/Objects/Rectangle.hpp"
+#include "../include/Objects/Square.hpp"
+#include "../include/Objects/Triangle.hpp"
 
 #include <iostream>
 
@@ -45,6 +50,10 @@ bool Application::Initialize()
         std::cerr << "SDL_CreateRenderer failed: " << SDL_GetError() << '\n';
         return false;
     }
+
+    _objects.emplace_back(std::make_unique<Triangle>());
+    _objects.emplace_back(std::make_unique<Square>());
+    _objects.emplace_back(std::make_unique<Rectangle>());
     
     return true;
 }
@@ -54,6 +63,14 @@ void Application::Cleanup()
     SDL_DestroyRenderer(_renderer.getRenderer());
     SDL_DestroyWindow(_window.getWindow());
     SDL_Quit();
+}
+
+// Renders all drawable objects
+void Application::Render(SDL_Renderer* renderer)
+{
+    for (const auto& obj : _objects) {
+        obj->render(renderer); // Call render method of each object
+    }
 }
 
 int Application::run()
@@ -68,6 +85,9 @@ int Application::run()
         // Rendering logic
         SDL_SetRenderDrawColor(_renderer.getRenderer(), 18, 18, 24, 255);
         SDL_RenderClear(_renderer.getRenderer());
+
+        Render(_renderer.getRenderer()); // Render all objects
+
         SDL_RenderPresent(_renderer.getRenderer());
     }
 
