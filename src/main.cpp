@@ -4,6 +4,8 @@
 
 int main()
 {
+    // Amo il mio gechino <3
+
     Application app;
 
     int result = app.run();
