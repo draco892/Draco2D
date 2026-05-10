@@ -6,47 +6,69 @@ project(Draco2D
     LANGUAGES CXX
 )
 
+# C++ Standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(Draco2D
+# Find dependencies
+find_package(SDL3 REQUIRED)
+
+# Source files
+set(SOURCES
     src/main.cpp
     src/Application.cpp
     src/Window.cpp
     src/Renderer2D.cpp
-    
+    src/Objects/Triangle.cpp
+    src/Objects/Square.cpp
+    src/Objects/Rectangle.cpp
+)
+
+# Header files
+set(HEADERS
     include/errors.h
     include/Application.hpp
     include/Window.hpp
     include/Renderer2D.hpp
-    
+    include/Base/BaseObject.hpp
+    include/Objects/Triangle.hpp
+    include/Objects/Square.hpp
+    include/Objects/Rectangle.hpp
 )
 
-target_include_directories(Draco2D PRIVATE include)
+# Create executable
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
-target_compile_features(Draco2D PRIVATE cxx_std_20)
+# Include directories
+target_include_directories(${PROJECT_NAME} PRIVATE include)
 
-find_package(SDL3 REQUIRED)
+# Compile features
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
-target_link_libraries(Draco2D PRIVATE SDL3::SDL3)
+# Link libraries
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
 
-target_compile_definitions(Draco2D PRIVATE
+# Compile definitions
+target_compile_definitions(${PROJECT_NAME} PRIVATE
     $<$<CONFIG:Debug>:D2D_DEBUG=1>
 )
 
+# Compiler warnings
 if(MSVC)
-    target_compile_options(Draco2D PRIVATE /W4 /permissive-)
+    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /permissive-)
 else()
-    target_compile_options(Draco2D PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
-set_target_properties(Draco2D PROPERTIES
+# Output name
+set_target_properties(${PROJECT_NAME} PROPERTIES
     OUTPUT_NAME "Draco2D"
 )
 
+# Platform-specific
 if(APPLE)
-    set_target_properties(Draco2D PROPERTIES
+    set_target_properties(${PROJECT_NAME} PROPERTIES
         XCODE_GENERATE_SCHEME ON
     )
 endif()

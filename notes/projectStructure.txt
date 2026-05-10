@@ -3,8 +3,19 @@ src/
   Application.cpp
   Window.cpp
   Renderer2D.cpp
+  Objects/
+    Triangle.cpp
+    Square.cpp
+    Rectangle.cpp
+
 
 include/
   Application.hpp
   Window.hpp
   Renderer2D.hpp
+  Objects/
+    Triangle.hpp
+    Square.hpp
+    Rectangle.hpp
+  Base/
+    BaseObject.hpp
