@@ -9,11 +9,12 @@
 #include "Window.hpp"
 #include "Renderer2D.hpp"
 #include "Base/BaseObject.hpp"
+#include "Base/ErrorClass.hpp"
 
 /**
  * @brief Main application class for managing the game loop and resources.
  */
-class Application
+class Application : public ErrorClass
 {
     /**
      * @brief Window instance used by the application.

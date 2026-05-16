@@ -1,5 +1,5 @@
 #include "../include/Application.hpp"
-#include "../include/errors.h"
+#include "../include/Base/ErrorClass.hpp"
 
 #include "../include/Objects/Rectangle.hpp"
 #include "../include/Objects/Square.hpp"
@@ -15,21 +15,19 @@ Application::Application(const std::string &title,
 , _renderer(_window.getWindow())
 , _running(true)
 {
-    // Initialize SDL first (as discussed in the previous analysis)
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
-        std::cerr << "SDL_Init failed: " << SDL_GetError() << '\n';
+        std::cerr << ErrorDescription(Errors::DRACO2D_SDL_INIT_FAILED_ERROR)
+                  << ": " << SDL_GetError() << std::endl;
         _running = false; // Signal failure
         return;
     }
 
-    // Now call Initialize()
     if (!Initialize())
     {
-        std::cerr << "Failed to initialize application." << '\n';
+        std::cerr << ErrorDescription(Errors::DRACO2D_CANNOT_INIZIALIZE_APPLICATION)
+                  << std::endl;
         Cleanup();
-        // DO NOT CALL exit() HERE. Just let the constructor finish.
-        // The calling function (main.cpp) will check the state.
         _running = false;
     }
 }
@@ -44,21 +42,24 @@ bool Application::Initialize()
     // Init SDL check
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
-        std::cerr << "SDL_Init failed: " << SDL_GetError() << '\n';
+        std::cerr << ErrorDescription(Errors::DRACO2D_SDL_INIT_FAILED_ERROR)
+                  <<": " << SDL_GetError() << '\n';
         return false;
     }
     
     // Check if window was created successfully
     if (!_window.getWindow())
     {
-        std::cerr << "SDL_CreateWindow failed: " << SDL_GetError() << '\n';
+        std::cerr << ErrorDescription(Errors::DRACO2D_SDL_CREATE_WINDOW_FAIL_ERROR)
+                  <<": " << SDL_GetError() << '\n';
         return false;
     }
     
     // Check if renderer was created successfully
     if (!_renderer.getRenderer())
     {
-        std::cerr << "SDL_CreateRenderer failed: " << SDL_GetError() << '\n';
+        std::cerr << ErrorDescription(Errors::DRACO2D_SDL_CREATE_RENDER_FAIL_ERROR)
+                  << ": " << SDL_GetError() << '\n';
         return false;
     }
 
@@ -91,7 +92,8 @@ int Application::run()
 {
     while (_running) {
         while (SDL_PollEvent(&_event)) {
-            if (_event.type == SDL_EVENT_QUIT) {
+            if (_event.type == SDL_EventType::SDL_EVENT_QUIT)
+            {
                 _running = false;
             }
         }
@@ -105,5 +107,5 @@ int Application::run()
         SDL_RenderPresent(_renderer.getRenderer());
     }
 
-    return DRACO2D_NO_ERROR;
+    return static_cast<int>(ErrorClass::Errors::DRACO2D_NO_ERROR);
 }
