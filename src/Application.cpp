@@ -15,11 +15,22 @@ Application::Application(const std::string &title,
 , _renderer(_window.getWindow())
 , _running(true)
 {
+    // Initialize SDL first (as discussed in the previous analysis)
+    if (!SDL_Init(SDL_INIT_VIDEO))
+    {
+        std::cerr << "SDL_Init failed: " << SDL_GetError() << '\n';
+        _running = false; // Signal failure
+        return;
+    }
+
+    // Now call Initialize()
     if (!Initialize())
     {
         std::cerr << "Failed to initialize application." << '\n';
         Cleanup();
-        exit(DRACO2D_SDL_INIT_FAILED_ERROR);
+        // DO NOT CALL exit() HERE. Just let the constructor finish.
+        // The calling function (main.cpp) will check the state.
+        _running = false;
     }
 }
 
@@ -60,8 +71,11 @@ bool Application::Initialize()
 
 void Application::Cleanup()
 {
+    // 1. Destroy resources owned by the application
     SDL_DestroyRenderer(_renderer.getRenderer());
     SDL_DestroyWindow(_window.getWindow());
+
+    // 2. Quit SDL only once, here.
     SDL_Quit();
 }
 

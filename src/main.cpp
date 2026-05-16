@@ -6,12 +6,15 @@ int main()
 {
     // Amo il mio gechino <3
 
-    Application app;
+    // Create the application object
+    Application app("Draco2D", 1280, 720, SDL_WINDOW_RESIZABLE);
 
-    int result = app.run();
-    if (result != DRACO2D_NO_ERROR) {
-        std::cerr << "Application exited with error code: " << result << '\n';
+    // Check if the application successfully initialized
+    int res(DRACO2D_NO_ERROR);
+    if ((res = app.run()) != DRACO2D_NO_ERROR)
+    {   // Assuming run() returns false on failure
+        std::cerr << "Application failed to run." << '\n';
     }
 
-    return result;
+    return res;
 }
