@@ -25,7 +25,7 @@ Application::Application(const std::string &title,
 
     if (!Initialize())
     {
-        std::cerr << ErrorDescription(Errors::DRACO2D_CANNOT_INIZIALIZE_APPLICATION)
+        std::cerr << ErrorDescription(Errors::DRACO2D_CANNOT_INITIALIZE_APPLICATION)
                   << std::endl;
         Cleanup();
         _running = false;
