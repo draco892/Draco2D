@@ -1,3 +1,4 @@
+#pragma once
 #ifndef DRACO2D_BASE_ERRORCLASS_H
 #define DRACO2D_BASE_ERRORCLASS_H
 

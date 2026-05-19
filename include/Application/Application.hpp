@@ -1,3 +1,4 @@
+#pragma once
 #ifndef DRACO2D_APPLICATION_H
 #define DRACO2D_APPLICATION_H
 
@@ -6,8 +7,8 @@
 #include <vector>
 #include <memory>
 
-#include "Window.hpp"
-#include "Renderer2D.hpp"
+#include "Window/Window.hpp"
+#include "Render/Renderer2D.hpp"
 #include "Base/BaseObject.hpp"
 #include "Base/ErrorClass.hpp"
 

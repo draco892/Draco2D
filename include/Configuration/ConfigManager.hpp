@@ -1,19 +1,42 @@
+#pragma once
 #ifndef DRACO2D_CONFIGMANAGER_H
 #define DRACO2D_CONFIGMANAGER_H
 
+#include "Base/ErrorClass.hpp"
+
 #include <string>
 
-class ConfigManager
+class ConfigManager : public ErrorClass
 {
     /**
      * @brief Internal structure to hold window configuration data.
      */
     struct WindowSettings
     {
-        std::string title = "Draco2D";
-        int width = 1280;
-        int height = 720;
+        std::string title;
+        int width;
+        int height;
+        std::string flags;
     };
+
+    /**
+     * @brief Internal structure to hold window graphics data.
+     */
+    struct GraphicsConfig {
+        bool vsync;
+        unsigned char default_color_r;
+        unsigned char default_color_g;
+        unsigned char default_color_b;
+    };
+
+    /**
+     * @brief Internal structure to hold Draco2D general configuration data.
+     */
+    struct Draco2DConfig {
+        WindowSettings window;
+        GraphicsConfig graphics;
+    };
+
 
     /**
      * @brief Stores the loaded window settings.

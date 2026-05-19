@@ -1,3 +1,4 @@
+#pragma once
 #ifndef DRACO2D_OBJECT_TRIANGLE_H
 #define DRACO2D_OBJECT_TRIANGLE_H
 

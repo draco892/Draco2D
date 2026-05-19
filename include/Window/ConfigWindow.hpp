@@ -1,0 +1,5 @@
+#pragma once
+#ifndef DRACO2D_CONFIG_WINDOW_H
+#define DRACO2D_CONFIG_WINDOW_H
+
+#endif  // !DRACO2D_CONFIG_WINDOW_H

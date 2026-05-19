@@ -77,10 +77,15 @@ endif()
 # Source files used to build the executable target.
 set(SOURCES
     src/main.cpp
-    src/Application.cpp
-    src/Window.cpp
-    src/Renderer2D.cpp
-    src/ConfigManager.cpp
+    # Application
+    src//Application/Application.cpp
+    # Window
+    src//Window/Window.cpp
+    # Render
+    src/Render/Renderer2D.cpp
+    # Configuration
+    src/Configuration/ConfigManager.cpp
+    # Objects
     src/Objects/Triangle.cpp
     src/Objects/Square.cpp
     src/Objects/Rectangle.cpp
@@ -88,13 +93,21 @@ set(SOURCES
 
 # Public and private header files included in the target.
 set(HEADERS
-
-    include/Application.hpp
-    include/Window.hpp
-    include/Renderer2D.hpp
-    include/ConfigManager.hpp
+    # Application
+    include/Application/Application.hpp
+    include/Application/ConfigApplication.hpp
+    # Window
+    include/Window/Window.hpp
+    include/Window/ConfigWindow.hpp
+    # Render
+    include/Render/Renderer2D.hpp
+    include/Render/ConfigRenderer2D.hpp
+    # Configuration
+    include/Configuration/ConfigManager.hpp
+    # Base
     include/Base/BaseObject.hpp
     include/Base/ErrorClass.hpp
+    # Objects
     include/Objects/Triangle.hpp
     include/Objects/Square.hpp
     include/Objects/Rectangle.hpp

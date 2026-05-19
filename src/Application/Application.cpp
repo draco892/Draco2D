@@ -1,4 +1,4 @@
-#include "../include/Application.hpp"
+#include "../include/Application/Application.hpp"
 #include "../include/Base/ErrorClass.hpp"
 
 #include "../include/Objects/Rectangle.hpp"
