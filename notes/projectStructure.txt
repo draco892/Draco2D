@@ -1,21 +1,36 @@
 src/
   main.cpp
-  Application.cpp
-  Window.cpp
-  Renderer2D.cpp
+  Application/
+    Application.cpp
+  Window/
+    Window.cpp
+  Render/
+    Renderer2D.cpp
   Objects/
     Triangle.cpp
     Square.cpp
     Rectangle.cpp
 
-
 include/
-  Application.hpp
-  Window.hpp
-  Renderer2D.hpp
+  Application/
+    Application.hpp
+    ConfigApplication.hpp
+  Base/
+    BaseObject.hpp
+    ErrorClass.hpp
+  Configuration/
+    ConfigManager.hpp
   Objects/
     Triangle.hpp
     Square.hpp
     Rectangle.hpp
-  Base/
-    BaseObject.hpp
+  Render/
+    Renderer2D.hpp
+    ConfigRenderer2D.hpp
+  Window/
+    Window.hpp
+    ConfigWindow.hpp
+
+notes/
+  projectStructure.txt
+  quickMacCmakeCommand.txt
