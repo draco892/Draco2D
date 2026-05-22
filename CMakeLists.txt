@@ -81,10 +81,14 @@ set(SOURCES
     src//Application/Application.cpp
     # Window
     src//Window/Window.cpp
+    src/Window/ConfigWindow.cpp
     # Render
     src/Render/Renderer2D.cpp
     # Configuration
     src/Configuration/ConfigManager.cpp
+    # Base
+    src/Base/BaseConfiguration.cpp
+    src/Base/ErrorClass.cpp
     # Objects
     src/Objects/Triangle.cpp
     src/Objects/Square.cpp
@@ -105,6 +109,7 @@ set(HEADERS
     # Configuration
     include/Configuration/ConfigManager.hpp
     # Base
+    include/Base/BaseConfiguration.hpp
     include/Base/BaseObject.hpp
     include/Base/ErrorClass.hpp
     # Objects

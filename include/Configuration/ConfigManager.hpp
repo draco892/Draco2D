@@ -3,6 +3,9 @@
 #define DRACO2D_CONFIGMANAGER_H
 
 #include "Base/ErrorClass.hpp"
+#include "../Application/ConfigApplication.hpp"
+#include "../Render/ConfigRenderer2D.hpp"
+#include "../Window/ConfigWindow.hpp"
 
 #include <string>
 

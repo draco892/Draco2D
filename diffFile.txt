@@ -1,0 +1,181 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b50126b..786eb54 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -81,10 +81,14 @@ set(SOURCES
+     src//Application/Application.cpp
+     # Window
+     src//Window/Window.cpp
++    src/Window/ConfigWindow.cpp
+     # Render
+     src/Render/Renderer2D.cpp
+     # Configuration
+     src/Configuration/ConfigManager.cpp
++    # Base
++    src/Base/BaseConfiguration.cpp
++    src/Base/ErrorClass.cpp
+     # Objects
+     src/Objects/Triangle.cpp
+     src/Objects/Square.cpp
+@@ -105,6 +109,7 @@ set(HEADERS
+     # Configuration
+     include/Configuration/ConfigManager.hpp
+     # Base
++    include/Base/BaseConfiguration.hpp
+     include/Base/BaseObject.hpp
+     include/Base/ErrorClass.hpp
+     # Objects
+diff --git a/include/Application/ConfigApplication.hpp b/include/Application/ConfigApplication.hpp
+index 6c623e7..798906f 100644
+--- a/include/Application/ConfigApplication.hpp
++++ b/include/Application/ConfigApplication.hpp
+@@ -3,4 +3,11 @@
+ #ifndef DRACO2D_CONFIG_WINDOW_H
+ #define DRACO2D_CONFIG_WINDOW_H
+ 
++class ConfigApplication
++{
++public:
++    ConfigApplication()
++    {}
++};
++
+ #endif  // !DRACO2D_CONFIG_WINDOW_H
+\ No newline at end of file
+diff --git a/include/Base/ErrorClass.hpp b/include/Base/ErrorClass.hpp
+index 8bc3f0b..8053490 100644
+--- a/include/Base/ErrorClass.hpp
++++ b/include/Base/ErrorClass.hpp
+@@ -71,11 +71,7 @@ public:
+      *
+      * @param error The standard ErrorClass::Errors type error
+      */
+-    void setLastError(const Errors error)
+-    {
+-        _error = error;
+-        _lastErrorMessage = ErrorDescription(error);
+-    }
++    void setLastError(const Errors error);
+ 
+     /**
+      * @brief Sets the last custom encountered error message string.
+@@ -113,42 +109,7 @@ public:
+      * @param error The error code to describe.
+      * @return A string containing the description of the error.
+      */
+-    std::string ErrorDescription(const Errors& error) const
+-    {
+-        switch (error)
+-        {
+-            // Success/No Error
+-        case Errors::DRACO2D_NO_ERROR:
+-            return std::string("No Error");
+-
+-            // SDL Error Codes
+-        case Errors::DRACO2D_SDL_INIT_FAILED_ERROR:
+-            return std::string("SDL_Init failed");
+-
+-        case Errors::DRACO2D_SDL_CREATE_WINDOW_FAIL_ERROR:
+-            return std::string("The SDL window could not be created");
+-
+-        case Errors::DRACO2D_SDL_CREATE_RENDER_FAIL_ERROR:
+-            return std::string("The SDL renderer could not be created");
+-
+-            // Configuration Error Codes
+-        case Errors::DRACO2D_CONFIG_MISSING_FILE:
+-            return std::string("Cannot access the JSON configuration file.");
+-
+-        case Errors::DRACO2D_CONFIG_BAD_PARAMETERS:
+-            return std::string("Invalid configuration parameters.");
+-
+-        case Errors::DRACO2D_CONFIG_MISSING_PARAMETERS:
+-            return std::string("Missing configuration parameters.");
+-
+-            // Application Logic Error Codes
+-        case Errors::DRACO2D_CANNOT_INITIALIZE_APPLICATION:
+-            return std::string("Failed to initialize the application.");
+-
+-        default:
+-            return std::string("UNKNOWN ERROR CODE");
+-        }
+-    }
++    std::string ErrorDescription(const Errors& error) const;
+ };
+ 
+ #endif  // !DRACO2D_BASE_ERRORCLASS_H
+diff --git a/include/Configuration/ConfigManager.hpp b/include/Configuration/ConfigManager.hpp
+index b3b52e8..c82edb5 100644
+--- a/include/Configuration/ConfigManager.hpp
++++ b/include/Configuration/ConfigManager.hpp
+@@ -3,6 +3,9 @@
+ #define DRACO2D_CONFIGMANAGER_H
+ 
+ #include "Base/ErrorClass.hpp"
++#include "../Application/ConfigApplication.hpp"
++#include "../Render/ConfigRenderer2D.hpp"
++#include "../Window/ConfigWindow.hpp"
+ 
+ #include <string>
+ 
+diff --git a/include/Render/ConfigRenderer2D.hpp b/include/Render/ConfigRenderer2D.hpp
+index ea30c0f..b8ebb9e 100644
+--- a/include/Render/ConfigRenderer2D.hpp
++++ b/include/Render/ConfigRenderer2D.hpp
+@@ -2,4 +2,11 @@
+ #ifndef DRACO2D_CONFIG_RENDERER_H
+ #define DRACO2D_CONFIG_RENDERER_H
+ 
++class ConfigRenderer2D
++{
++public:
++    ConfigRenderer2D()
++    {}
++};
++
+ #endif  // !DRACO2D_CONFIG_RENDERER_H
+\ No newline at end of file
+diff --git a/include/Window/ConfigWindow.hpp b/include/Window/ConfigWindow.hpp
+index dd0be37..ab4d7fa 100644
+--- a/include/Window/ConfigWindow.hpp
++++ b/include/Window/ConfigWindow.hpp
+@@ -2,4 +2,39 @@
+ #ifndef DRACO2D_CONFIG_WINDOW_H
+ #define DRACO2D_CONFIG_WINDOW_H
+ 
++#include <string>
++
++#include "../Base/BaseConfiguration.hpp"
++
++class ConfigWindow : public BaseConfiguration
++{
++    /**
++     * @brief Internal structure to hold window configuration data.
++     */
++    struct WindowSettings
++    {
++        std::string title;
++        int width;
++        int height;
++        std::string flags;
++    };
++public:
++
++    /**
++     * @brief Explicit window configuration class costructor.
++     *
++     * @param filepath The window configuration filePath.
++     */
++    explicit ConfigWindow(const std::string &filepath)
++        : BaseConfiguration(filepath)
++    {}
++
++    /**
++     * @brief Attempts to load and parse configuration settings from a JSON file.
++     *
++     * @return True if loading and parsing were successful, false otherwise.
++     */
++    virtual bool load() final;
++};
++
+ #endif  // !DRACO2D_CONFIG_WINDOW_H
+\ No newline at end of file

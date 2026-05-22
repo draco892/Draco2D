@@ -3,4 +3,11 @@
 #ifndef DRACO2D_CONFIG_WINDOW_H
 #define DRACO2D_CONFIG_WINDOW_H
 
+class ConfigApplication
+{
+public:
+    ConfigApplication()
+    {}
+};
+
 #endif  // !DRACO2D_CONFIG_WINDOW_H
