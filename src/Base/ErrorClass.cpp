@@ -25,8 +25,8 @@ std::string ErrorClass::ErrorDescription(const Errors& error) const
         return std::string("The SDL renderer could not be created");
 
         // Configuration Error Codes
-    case Errors::DRACO2D_CONFIG_MISSING_FILE:
-        return std::string("Cannot access the JSON configuration file.");
+    case Errors::DRACO2D_FILE_MISSING:
+        return std::string("File Missing.");
 
     case Errors::DRACO2D_CONFIG_BAD_PARAMETERS:
         return std::string("Invalid configuration parameters.");

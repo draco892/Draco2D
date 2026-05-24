@@ -25,9 +25,7 @@ public:
      *
      * @param filepath The window configuration filePath.
      */
-    explicit ConfigWindow(const std::string &filepath)
-        : BaseConfiguration(filepath)
-    {}
+    explicit ConfigWindow(const std::string &filepath);
 
     /**
      * @brief Attempts to load and parse configuration settings from a JSON file.

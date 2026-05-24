@@ -19,16 +19,21 @@ class BaseConfiguration : public ErrorClass
      */
     bool _isValid;
 
+protected:
+    /**
+     * @brief Set the isValid param value
+     *
+     * @param isValid param value to set
+     */
+    void setIsValid(const bool isValid);
+
 public:
     /**
      * @brief Default class costructor.
      *
      * @param filepath The configuration filePath.
      */
-    BaseConfiguration(const std::string &filepath)
-        : _filepath(filepath)
-        , _isValid(std::filesystem::exists(filepath))
-    {}
+    BaseConfiguration(const std::string &filepath);
 
     /**
      * @brief Virtual destructor to allow proper cleanup of derived objects.

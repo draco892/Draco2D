@@ -19,25 +19,28 @@ public:
      *
      * Using an enum class provides strong type safety.
      */
-    enum class Errors : std::uint8_t
+    enum class Errors : uint8_t
     {
         // Success/No Error
         DRACO2D_NO_ERROR                        = std::uint8_t(0),
 
         // SDL Error Codes
-        DRACO2D_SDL_INIT_FAILED_ERROR           = DRACO2D_NO_ERROR + std::uint8_t(1),
-        DRACO2D_SDL_CREATE_WINDOW_FAIL_ERROR    = DRACO2D_NO_ERROR + std::uint8_t(2),
-        DRACO2D_SDL_CREATE_RENDER_FAIL_ERROR    = DRACO2D_NO_ERROR + std::uint8_t(3),
+        DRACO2D_SDL_INIT_FAILED_ERROR           = DRACO2D_NO_ERROR + uint8_t(1),
+        DRACO2D_SDL_CREATE_WINDOW_FAIL_ERROR    = DRACO2D_NO_ERROR + uint8_t(2),
+        DRACO2D_SDL_CREATE_RENDER_FAIL_ERROR    = DRACO2D_NO_ERROR + uint8_t(3),
+
+        // File Error Codes
+        DRACO2D_FILE_BASE_ERROR                 = 10,
+        DRACO2D_FILE_MISSING                    = DRACO2D_FILE_BASE_ERROR + uint8_t(0),
 
         // Configuration Error Codes
         DRACO2D_CONFIG_BASE_ERROR               = 20,
-        DRACO2D_CONFIG_MISSING_FILE             = DRACO2D_CONFIG_BASE_ERROR + std::uint8_t(1),
-        DRACO2D_CONFIG_BAD_PARAMETERS           = DRACO2D_CONFIG_BASE_ERROR + std::uint8_t(2),
-        DRACO2D_CONFIG_MISSING_PARAMETERS       = DRACO2D_CONFIG_BASE_ERROR + std::uint8_t(3),
+        DRACO2D_CONFIG_BAD_PARAMETERS           = DRACO2D_CONFIG_BASE_ERROR + uint8_t(0),
+        DRACO2D_CONFIG_MISSING_PARAMETERS       = DRACO2D_CONFIG_BASE_ERROR + uint8_t(1),
 
         // Application Logic Error Codes
-        DRACO2D_APPLICATION_BASE_ERROR          = 40,
-        DRACO2D_CANNOT_INITIALIZE_APPLICATION   = DRACO2D_APPLICATION_BASE_ERROR + std::uint8_t(1)
+        DRACO2D_APPLICATION_BASE_ERROR          = 30,
+        DRACO2D_CANNOT_INITIALIZE_APPLICATION   = DRACO2D_APPLICATION_BASE_ERROR + uint8_t(0)
     };
 
 private:

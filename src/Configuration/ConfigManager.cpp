@@ -10,7 +10,7 @@ ConfigManager::ConfigManager(const std::string &filepath)
 {
     if (!_isValid)
     {
-        setLastError(Errors::DRACO2D_CONFIG_MISSING_FILE);
+        //setLastError(Errors::DRACO2D_CONFIG_MISSING_FILE);
         return;
     }
 

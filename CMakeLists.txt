@@ -87,6 +87,8 @@ set(SOURCES
     # Configuration
     src/Configuration/ConfigManager.cpp
     # Base
+    src/Base/BaseValidateClass.cpp
+    src/Base/BaseFile.cpp
     src/Base/BaseConfiguration.cpp
     src/Base/ErrorClass.cpp
     # Objects
@@ -109,6 +111,8 @@ set(HEADERS
     # Configuration
     include/Configuration/ConfigManager.hpp
     # Base
+    include/Base/BaseValidateClass.hpp
+    include/Base/BaseFile.hpp
     include/Base/BaseConfiguration.hpp
     include/Base/BaseObject.hpp
     include/Base/ErrorClass.hpp
