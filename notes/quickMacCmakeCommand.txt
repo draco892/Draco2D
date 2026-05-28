@@ -1,0 +1,7 @@
+# regular cMake (to just update the project)
+
+cmake --fresh -S . -B build-xcode -G Xcode -DCMAKE_PREFIX_PATH=$(brew --prefix sdl3)
+
+# complete procedure to re-create it by the cMake
+rm -rf build-xcode
+cmake -S . -B build-xcode -G Xcode -DCMAKE_PREFIX_PATH=$(brew --prefix sdl3)
