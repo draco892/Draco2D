@@ -67,3 +67,6 @@ xcuserdata/
 # Editors
 .vscode/
 .idea/
+
+# qtCreator
+.qtcreator/
