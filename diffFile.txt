@@ -1,0 +1,185 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 786eb54..0d5f1e2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -87,6 +87,8 @@ set(SOURCES
+     # Configuration
+     src/Configuration/ConfigManager.cpp
+     # Base
++    src/Base/BaseValidateClass.cpp
++    src/Base/BaseFile.cpp
+     src/Base/BaseConfiguration.cpp
+     src/Base/ErrorClass.cpp
+     # Objects
+@@ -109,6 +111,8 @@ set(HEADERS
+     # Configuration
+     include/Configuration/ConfigManager.hpp
+     # Base
++    include/Base/BaseValidateClass.hpp
++    include/Base/BaseFile.hpp
+     include/Base/BaseConfiguration.hpp
+     include/Base/BaseObject.hpp
+     include/Base/ErrorClass.hpp
+diff --git a/include/Base/BaseConfiguration.hpp b/include/Base/BaseConfiguration.hpp
+index 1bea029..e7a9cbd 100644
+--- a/include/Base/BaseConfiguration.hpp
++++ b/include/Base/BaseConfiguration.hpp
+@@ -19,16 +19,21 @@ class BaseConfiguration : public ErrorClass
+      */
+     bool _isValid;
+ 
++protected:
++    /**
++     * @brief Set the isValid param value
++     *
++     * @param isValid param value to set
++     */
++    void setIsValid(const bool isValid);
++
+ public:
+     /**
+      * @brief Default class costructor.
+      *
+      * @param filepath The configuration filePath.
+      */
+-    BaseConfiguration(const std::string &filepath)
+-        : _filepath(filepath)
+-        , _isValid(std::filesystem::exists(filepath))
+-    {}
++    BaseConfiguration(const std::string &filepath);
+ 
+     /**
+      * @brief Virtual destructor to allow proper cleanup of derived objects.
+diff --git a/include/Base/ErrorClass.hpp b/include/Base/ErrorClass.hpp
+index 8053490..333d925 100644
+--- a/include/Base/ErrorClass.hpp
++++ b/include/Base/ErrorClass.hpp
+@@ -19,25 +19,28 @@ public:
+      *
+      * Using an enum class provides strong type safety.
+      */
+-    enum class Errors : std::uint8_t
++    enum class Errors : uint8_t
+     {
+         // Success/No Error
+         DRACO2D_NO_ERROR                        = std::uint8_t(0),
+ 
+         // SDL Error Codes
+-        DRACO2D_SDL_INIT_FAILED_ERROR           = DRACO2D_NO_ERROR + std::uint8_t(1),
+-        DRACO2D_SDL_CREATE_WINDOW_FAIL_ERROR    = DRACO2D_NO_ERROR + std::uint8_t(2),
+-        DRACO2D_SDL_CREATE_RENDER_FAIL_ERROR    = DRACO2D_NO_ERROR + std::uint8_t(3),
++        DRACO2D_SDL_INIT_FAILED_ERROR           = DRACO2D_NO_ERROR + uint8_t(1),
++        DRACO2D_SDL_CREATE_WINDOW_FAIL_ERROR    = DRACO2D_NO_ERROR + uint8_t(2),
++        DRACO2D_SDL_CREATE_RENDER_FAIL_ERROR    = DRACO2D_NO_ERROR + uint8_t(3),
++
++        // File Error Codes
++        DRACO2D_FILE_BASE_ERROR                 = 10,
++        DRACO2D_FILE_MISSING                    = DRACO2D_FILE_BASE_ERROR + uint8_t(0),
+ 
+         // Configuration Error Codes
+         DRACO2D_CONFIG_BASE_ERROR               = 20,
+-        DRACO2D_CONFIG_MISSING_FILE             = DRACO2D_CONFIG_BASE_ERROR + std::uint8_t(1),
+-        DRACO2D_CONFIG_BAD_PARAMETERS           = DRACO2D_CONFIG_BASE_ERROR + std::uint8_t(2),
+-        DRACO2D_CONFIG_MISSING_PARAMETERS       = DRACO2D_CONFIG_BASE_ERROR + std::uint8_t(3),
++        DRACO2D_CONFIG_BAD_PARAMETERS           = DRACO2D_CONFIG_BASE_ERROR + uint8_t(0),
++        DRACO2D_CONFIG_MISSING_PARAMETERS       = DRACO2D_CONFIG_BASE_ERROR + uint8_t(1),
+ 
+         // Application Logic Error Codes
+-        DRACO2D_APPLICATION_BASE_ERROR          = 40,
+-        DRACO2D_CANNOT_INITIALIZE_APPLICATION   = DRACO2D_APPLICATION_BASE_ERROR + std::uint8_t(1)
++        DRACO2D_APPLICATION_BASE_ERROR          = 30,
++        DRACO2D_CANNOT_INITIALIZE_APPLICATION   = DRACO2D_APPLICATION_BASE_ERROR + uint8_t(0)
+     };
+ 
+ private:
+diff --git a/include/Window/ConfigWindow.hpp b/include/Window/ConfigWindow.hpp
+index ab4d7fa..7de74ba 100644
+--- a/include/Window/ConfigWindow.hpp
++++ b/include/Window/ConfigWindow.hpp
+@@ -25,9 +25,7 @@ public:
+      *
+      * @param filepath The window configuration filePath.
+      */
+-    explicit ConfigWindow(const std::string &filepath)
+-        : BaseConfiguration(filepath)
+-    {}
++    explicit ConfigWindow(const std::string &filepath);
+ 
+     /**
+      * @brief Attempts to load and parse configuration settings from a JSON file.
+diff --git a/src/Base/BaseConfiguration.cpp b/src/Base/BaseConfiguration.cpp
+index d38d95f..5008864 100644
+--- a/src/Base/BaseConfiguration.cpp
++++ b/src/Base/BaseConfiguration.cpp
+@@ -1,5 +1,23 @@
+ #include "../include/Base/BaseConfiguration.hpp"
+ 
++// Protected
++
++void BaseConfiguration::setIsValid(const bool isValid)
++{
++    _isValid = isValid;
++}
++
++//Public
++
++BaseConfiguration::BaseConfiguration(const std::string &filepath)
++    : _filepath(filepath)
++    , _isValid(true)
++{
++    if (!std::filesystem::exists(_filepath))
++    {
++
++    }
++}
+ 
+ std::string BaseConfiguration::getFilePath() const
+ {
+diff --git a/src/Base/ErrorClass.cpp b/src/Base/ErrorClass.cpp
+index 5cbb7f3..88d0da3 100644
+--- a/src/Base/ErrorClass.cpp
++++ b/src/Base/ErrorClass.cpp
+@@ -25,8 +25,8 @@ std::string ErrorClass::ErrorDescription(const Errors& error) const
+         return std::string("The SDL renderer could not be created");
+ 
+         // Configuration Error Codes
+-    case Errors::DRACO2D_CONFIG_MISSING_FILE:
+-        return std::string("Cannot access the JSON configuration file.");
++    case Errors::DRACO2D_FILE_MISSING:
++        return std::string("File Missing.");
+ 
+     case Errors::DRACO2D_CONFIG_BAD_PARAMETERS:
+         return std::string("Invalid configuration parameters.");
+diff --git a/src/Configuration/ConfigManager.cpp b/src/Configuration/ConfigManager.cpp
+index 640fd8f..a386e17 100644
+--- a/src/Configuration/ConfigManager.cpp
++++ b/src/Configuration/ConfigManager.cpp
+@@ -10,7 +10,7 @@ ConfigManager::ConfigManager(const std::string &filepath)
+ {
+     if (!_isValid)
+     {
+-        setLastError(Errors::DRACO2D_CONFIG_MISSING_FILE);
++        //setLastError(Errors::DRACO2D_CONFIG_MISSING_FILE);
+         return;
+     }
+ 
+diff --git a/src/Window/ConfigWindow.cpp b/src/Window/ConfigWindow.cpp
+index 549f139..63ee390 100644
+--- a/src/Window/ConfigWindow.cpp
++++ b/src/Window/ConfigWindow.cpp
+@@ -1 +1,12 @@
+-#include "../include/Window/ConfigWindow.hpp"
+\ No newline at end of file
++#include "../include/Window/ConfigWindow.hpp"
++
++ConfigWindow::ConfigWindow(const std::string &filepath)
++    : BaseConfiguration(filepath)
++{}
++
++bool ConfigWindow::load()
++{
++    bool res = true;
++
++    return res;
++}
+\ No newline at end of file
