@@ -30,9 +30,9 @@ public:
     /**
      * @brief Attempts to load and parse configuration settings from a JSON file.
      *
-     * @return True if loading and parsing were successful, false otherwise.
+     * @return ErrorClass::ErrorsDRACO2D_NO_ERROR if loading and parsing were successful, the respective error otherwise.
      */
-    virtual bool load() final;
+    virtual ErrorClass::Errors load() final;
 };
 
 #endif  // !DRACO2D_CONFIG_WINDOW_H
