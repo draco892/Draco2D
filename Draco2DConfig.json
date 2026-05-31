@@ -1,12 +1,12 @@
 {
-    "window": 
+    "WindowSettings": 
     {
         "title": "Draco2D Engine",
         "width": 1280,
         "height": 720,
         "flags": "RESIZABLE"
     },
-    "graphics":
+    "GraphicsSettings":
     {
         "vsync": true,
         "default_color_r": 18,
