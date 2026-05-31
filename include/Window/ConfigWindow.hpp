@@ -6,11 +6,14 @@
 
 #include "../Base/BaseConfiguration.hpp"
 
-class ConfigWindow : public BaseConfiguration
-{
-    /**
+/**
      * @brief Internal structure to hold window configuration data.
      */
+
+
+class ConfigWindow : public BaseConfiguration
+{
+public:
     struct WindowSettings
     {
         std::string title;
@@ -18,7 +21,6 @@ class ConfigWindow : public BaseConfiguration
         int height;
         std::string flags;
     };
-public:
 
     /**
      * @brief Explicit window configuration class costructor.
@@ -33,6 +35,11 @@ public:
      * @return ErrorClass::ErrorsDRACO2D_NO_ERROR if loading and parsing were successful, the respective error otherwise.
      */
     virtual ErrorClass::Errors load() final;
+
+    WindowSettings GetWindowSettings() const;
+
+private:
+    WindowSettings _ws;
 };
 
 #endif  // !DRACO2D_CONFIG_WINDOW_H

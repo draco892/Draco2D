@@ -71,7 +71,13 @@ public:
      * @brief return the ifstream file pointer
      * (NOTE: can be nullptr)
      */
-    std::ifstream* GetReadFile() const;
+    std::ifstream* GetReadFile();
+
+    /**
+     * @brief return the ofstream file pointer
+     * (NOTE: can be nullptr)
+     */
+    std::ofstream* GetWriteFile();
 
 private:
     /**
@@ -87,12 +93,12 @@ private:
     /**
      * @brief file ifstream
      */
-    const std::ifstream _ifStream;
+    std::ifstream _ifStream;
 
     /**
      * @brief file ofstream
      */
-    const std::ofstream _ofStream;
+    std::ofstream _ofStream;
 };
 
 #endif  // !DRACO2D_BASE_BASEFILE_H

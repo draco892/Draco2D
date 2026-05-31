@@ -52,6 +52,8 @@ if(NOT SDL3_FOUND)
     FetchContent_MakeAvailable(SDL3)
 endif()
 
+# ------------------------------------------------------------ SDL3 end
+
 # ------------------------------------------------------------
 # nlohmann/json
 # ------------------------------------------------------------
@@ -73,6 +75,25 @@ if(NOT nlohmann_json_FOUND)
 
     FetchContent_MakeAvailable(json)
 endif()
+# ------------------------------------------------------------ nlohmann/json end
+
+# ------------------------------------------------------------
+# Boost
+# ------------------------------------------------------------
+if(DRACO2D_PREFER_SYSTEM_DEPS)
+    find_package(Boost CONFIG QUIET)
+endif()
+
+if(NOT Boost_FOUND)
+    message(STATUS "Boost not found on system, fetching via Content...")
+    FetchContent_Declare(
+        boost
+        GIT_REPOSITORY https://github.com/boostorg/boost.git
+        GIT_TAG boost-1.85.0
+    )
+    FetchContent_MakeAvailable(boost)
+endif()
+# ------------------------------------------------------------ Boost end
 
 # Source files used to build the executable target.
 set(SOURCES

@@ -1,6 +1,13 @@
 #include "../include/Window/ConfigWindow.hpp"
 
 #include <iostream>
+#include <string>
+#include <boost/describe.hpp>
+#include <boost/mp11.hpp>
+
+BOOST_DESCRIBE_STRUCT(ConfigWindow::WindowSettings, (), (title, width, height, flags))
+
+static const std::string WindowsSectionName("window");
 
 ConfigWindow::ConfigWindow(const std::string &filepath)
     : BaseConfiguration(filepath)
@@ -16,13 +23,21 @@ ConfigWindow::ConfigWindow(const std::string &filepath)
 
 ErrorClass::Errors ConfigWindow::load()
 {
-    // File Check
-    if (!BaseValidateClass::IsValid())
+    if (!IsValid())
     {
         return ErrorClass::getLastError();
     }
 
-
+    boost::mp11::mp_for_each<boost::describe::describe_members<WindowSettings,
+                                                               boost::describe::mod_public>>([this](auto D)
+    {
+        _ws.*D.pointer = (*GetParsedJson())[WindowsSectionName][D.name];
+    });
 
     return ErrorClass::Errors::DRACO2D_NO_ERROR;
+}
+
+ConfigWindow::WindowSettings ConfigWindow::GetWindowSettings() const
+{
+    return _ws;
 }

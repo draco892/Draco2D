@@ -91,3 +91,13 @@ BaseFile::FileAccessMode BaseFile::GetAccessMode() const
 {
     return _accesMode;
 }
+
+std::ifstream* BaseFile::GetReadFile()
+{
+    return &_ifStream;
+}
+
+std::ofstream* BaseFile::GetWriteFile()
+{
+    return &_ofStream;
+}
