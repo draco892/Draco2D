@@ -24,10 +24,20 @@ std::string ErrorClass::ErrorDescription(const Errors& error) const
     case Errors::DRACO2D_SDL_CREATE_RENDER_FAIL_ERROR:
         return std::string("The SDL renderer could not be created");
 
-        // Configuration Error Codes
+        // File Error Codes
     case Errors::DRACO2D_FILE_MISSING:
         return std::string("File Missing.");
 
+    case Errors::DRACO2D_FILE_CANNOT_READ:
+        return std::string("Cannot read file.");
+
+    case Errors::DRACO2D_FILE_CANNOT_WRITE:
+        return std::string("Cannot write file.");
+
+    case Errors::DRACO2D_FILE_NULLPTR:
+        return std::string("Nullptr passed");
+
+        // Configuration Error Codes
     case Errors::DRACO2D_CONFIG_BAD_PARAMETERS:
         return std::string("Invalid configuration parameters.");
 
@@ -39,6 +49,6 @@ std::string ErrorClass::ErrorDescription(const Errors& error) const
         return std::string("Failed to initialize the application.");
 
     default:
-        return std::string("UNKNOWN ERROR CODE");
+        return std::string("UNKNOWN ERROR");
     }
 }

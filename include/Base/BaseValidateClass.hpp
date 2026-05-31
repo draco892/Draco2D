@@ -36,7 +36,7 @@ public:
      *
      * @return the isValid value
      */
-    bool isValid() const;
+    bool IsValid() const;
 };
 
 #endif  // !DRACO2D_BASE_BASEVALIDATECLASS_H

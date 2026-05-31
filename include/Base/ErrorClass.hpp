@@ -32,6 +32,9 @@ public:
         // File Error Codes
         DRACO2D_FILE_BASE_ERROR                 = 10,
         DRACO2D_FILE_MISSING                    = DRACO2D_FILE_BASE_ERROR + uint8_t(0),
+        DRACO2D_FILE_CANNOT_READ                = DRACO2D_FILE_BASE_ERROR + uint8_t(1),
+        DRACO2D_FILE_CANNOT_WRITE               = DRACO2D_FILE_BASE_ERROR + uint8_t(2),
+        DRACO2D_FILE_NULLPTR                    = DRACO2D_FILE_BASE_ERROR + uint8_t(3),
 
         // Configuration Error Codes
         DRACO2D_CONFIG_BASE_ERROR               = 20,
