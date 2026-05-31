@@ -2,30 +2,16 @@
 #ifndef DRACO2D_BASE_CONFIG_H
 #define DRACO2D_BASE_CONFIG_H
 
-#include <string>
-#include <filesystem>
+#include "BaseFile.hpp"
 
-#include "ErrorClass.hpp"
+#include <nlohmann/json.hpp>
 
-class BaseConfiguration : public ErrorClass
+class BaseConfiguration : public BaseFile
 {
     /**
-     * @brief Json configuration filepath
+     * @brief the parsed json
      */
-    const std::string _filepath;
-
-    /**
-     * @brief Json configuration filepath
-     */
-    bool _isValid;
-
-protected:
-    /**
-     * @brief Set the isValid param value
-     *
-     * @param isValid param value to set
-     */
-    void setIsValid(const bool isValid);
+    const nlohmann::json _jsonP;
 
 public:
     /**
@@ -33,7 +19,7 @@ public:
      *
      * @param filepath The configuration filePath.
      */
-    BaseConfiguration(const std::string &filepath);
+    explicit BaseConfiguration(const std::filesystem::path &filepath);
 
     /**
      * @brief Virtual destructor to allow proper cleanup of derived objects.
@@ -41,25 +27,20 @@ public:
     virtual ~BaseConfiguration() = default;
 
     /**
-     * @brief Attempts to load and parse configuration settings from a JSON file.
+     * @brief Load the json configuration.
      *
-     * @return True if loading and parsing were successful, false otherwise.
+     * @return ErrorClass::ErrorsDRACO2D_NO_ERROR if loading and parsing were successful, the respective error otherwise.
      */
-    virtual bool load() = 0;
+    virtual ErrorClass::Errors load() = 0;
 
     /**
-     * @brief Return the json file configuration filepath
+     * @brief Get the parsed json pointer
      *
-     * @return The json file configuration filepath
+     * @return the parsed json pointer
+     * (NOTE: can be nullptr)
      */
-    std::string getFilePath() const;
+    const nlohmann::json* GetParsedJson() const;
 
-    /**
-     * @brief Return the json file configuration filepath
-     *
-     * @return The json file configuration filepath
-     */
-    bool isValid() const;
 };
 
 #endif  // !DRACO2D_BASE_CONFIG_H

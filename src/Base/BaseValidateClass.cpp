@@ -13,7 +13,7 @@ BaseValidateClass::BaseValidateClass(const bool isValid)
     : _isValid(isValid)
 {}
 
-bool BaseValidateClass::isValid() const
+bool BaseValidateClass::IsValid() const
 {
     return _isValid;
 }

@@ -1,31 +1,14 @@
 #include "../include/Base/BaseConfiguration.hpp"
 
-// Protected
+#include <filesystem>
 
-void BaseConfiguration::setIsValid(const bool isValid)
+BaseConfiguration::BaseConfiguration(const std::filesystem::path &filepath)
+    : BaseFile(filepath, BaseFile::FileAccessMode::READ)
+    , _jsonP(nlohmann::json::parse(*BaseFile::GetReadFile()))
+{}
+
+
+const nlohmann::json* BaseConfiguration::GetParsedJson() const
 {
-    _isValid = isValid;
-}
-
-//Public
-
-BaseConfiguration::BaseConfiguration(const std::string &filepath)
-    : _filepath(filepath)
-    , _isValid(true)
-{
-    if (!std::filesystem::exists(_filepath))
-    {
-
-    }
-}
-
-std::string BaseConfiguration::getFilePath() const
-{
-    return _filepath;
-}
-
-
-bool BaseConfiguration::isValid() const
-{
-    return _isValid;
+    return &_jsonP;
 }
