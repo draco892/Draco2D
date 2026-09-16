@@ -1,0 +1,10 @@
+Refactor the application to use a standard Game Loop (ProcessInput -> Update -> Render).
+Implement an EntityManager or Scene manager to handle game object lifecycles.
+Integrate SDL Input handling (Keyboard, Mouse, Controller).
+Add support for Texture/Sprite rendering (loading images).
+Implement a Collision Detection system (e.g., AABB for Rectangles).
+Create an Asset Manager for loading and caching textures/sounds.
+Integrate the Configuration system into the Object and Renderer classes.
+Add a Basic UI system for HUD or menus.
+Add unit tests for core math and geometry calculations.
+Update documentation and examples as features are added.

@@ -1,0 +1,17 @@
+### Animation Plan: Bouncing Rectangle
+
+**Objective:** Implement an animation where a rectangle moves across the screen and bounces off the boundaries.
+
+**Phase 1: Foundation**
+- [ ] Update `BaseObject` to handle updated state (done).
+- [ ] Add `velocity` (vx, vy) and `color` properties to the `Rectangle` class.
+- [ ] Implement the `Update()` method for `Rectangle` to modify its position based on velocity.
+
+**Phase 2: Behaviors**
+- [ ] Add Boundary checking: If the rectangle hits the screen edge, invert the relevant velocity component.
+- [ ] Create a "Counter-Moving" animation: Initialize two rectangles with opposing velocities to create a more dynamic scene.
+
+**Phase 3: Verification**
+- [ ] Verify smooth movement (no jittering).
+- [ ] Verify correct collision with screen edges.
+- [ ] Documentation Update: Add a section in README describing the sample animation.

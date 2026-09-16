@@ -22,7 +22,7 @@ Application::Application(const std::string &title,
         _running = false; // Signal failure
         return;
     }
-
+  
     if (!Initialize())
     {
         std::cerr << ErrorDescription(Errors::DRACO2D_CANNOT_INITIALIZE_APPLICATION)
@@ -62,7 +62,7 @@ bool Application::Initialize()
                   << ": " << SDL_GetError() << '\n';
         return false;
     }
-
+    
     _objects.emplace_back(std::make_unique<Triangle>());
     _objects.emplace_back(std::make_unique<Square>());
     _objects.emplace_back(std::make_unique<Rectangle>());
@@ -75,9 +75,16 @@ void Application::Cleanup()
     // 1. Destroy resources owned by the application
     SDL_DestroyRenderer(_renderer.getRenderer());
     SDL_DestroyWindow(_window.getWindow());
-
+  
     // 2. Quit SDL only once, here.
     SDL_Quit();
+}
+
+void Application::Update()
+{
+    for (const auto& obj : _objects) {
+        obj->update();
+    }
 }
 
 // Renders all drawable objects
@@ -97,15 +104,16 @@ int Application::run()
                 _running = false;
             }
         }
-
+    
         // Rendering logic
         SDL_SetRenderDrawColor(_renderer.getRenderer(), 18, 18, 24, 255);
         SDL_RenderClear(_renderer.getRenderer());
-
+    
+        Update();
         Render(_renderer.getRenderer()); // Render all objects
-
+    
         SDL_RenderPresent(_renderer.getRenderer());
     }
-
+    
     return static_cast<int>(ErrorClass::Errors::DRACO2D_NO_ERROR);
 }
