@@ -1,7 +1,6 @@
 #include "../include/Configuration/ConfigManager.hpp"
 
 #include <filesystem>
-#include <fstream>
 #include <nlohmann/json.hpp>
 
 ConfigManager::ConfigManager(const std::string &filepath)

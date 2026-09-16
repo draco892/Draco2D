@@ -137,6 +137,7 @@ set(HEADERS
     include/Base/BaseConfiguration.hpp
     include/Base/BaseObject.hpp
     include/Base/ErrorClass.hpp
+    include/Base/BaseColor.hpp
     # Objects
     include/Objects/Triangle.hpp
     include/Objects/Square.hpp

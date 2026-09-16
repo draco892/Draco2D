@@ -2,7 +2,13 @@
 
 2D engine created for educational purposes.
 
-## Overview
+## Features
+
+- **Core Engine**: Built using SDL3 and C++20.
+- **Window Management**: Supports window creation, resizing, and manual closing.
+- **2D Renderer**: A straightforward rendering loop for basic graphics.
+- **Geometric Shapes**: Supports rendering of Triangles, Squares, and Rectangles.
+
 
 Draco2D is a small 2D engine project written in C++ and built with CMake. The project is intended for learning engine architecture, rendering flow, input handling, and cross-platform development across macOS, Linux, and Windows.
 
@@ -53,7 +59,12 @@ open build-xcode/Draco2D.xcodeproj
 
 If your CMake `project()` name is different, replace `Draco2D.xcodeproj` with the generated project name. The Xcode generator is designed to create native Xcode project files and schemes for building and running targets on macOS.
 
-### Build from terminal
+
+
+
+### Run the application
+
+After building, you can run the application by executing the binary in the `build-xcode` directory.
 
 You can also build without opening Xcode:
 
@@ -112,22 +123,25 @@ CMake can generate native Visual Studio project files, and Visual Studio also wo
 Example using the Visual Studio generator:
 
 ```powershell
-cmake -S . -B build-vs -G "Visual Studio 18 2026" -A x64
+cmake -S . -B build-vs -G "Visual Studio 17 2022" -A x64
 ```
 
-CMake documents the Visual Studio 18 2026 generator and its architecture selection through the `-A` option.
+CMake documents the Visual Studio 17 2022 generator and its architecture selection through the `-A` option.
 
 If SDL3 is not in a default search path, pass its install directory with `CMAKE_PREFIX_PATH`:
 
 ```powershell
-cmake -S . -B build-vs -G "Visual Studio 18 2026" -A x64 -DCMAKE_PREFIX_PATH="C:/path/to/SDL3"
+cmake -S . -B build-vs -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="C:/path/to/SDL3"
 ```
 
-### Build from terminal
 
-```powershell
-cmake --build build-vs --config Debug
-```
+
+
+### Run the application
+
+After building, you can run the application by executing the binary in the `build-vs` directory.
+
+
 
 ## Generic CMake workflow
 

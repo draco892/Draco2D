@@ -100,6 +100,14 @@ private:
      * @param renderer The SDL_Renderer to render onto.
      */
     void Render(SDL_Renderer* renderer);
+
+    /**
+     * @brief Updates the state of all objects in the application.
+     *
+     * This should be called once per frame before rendering.
+     */
+    void Update();
+
 };
 
 #endif  // !DRACO2D_APPLICATION_H

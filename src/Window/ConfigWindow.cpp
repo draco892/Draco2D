@@ -2,12 +2,12 @@
 
 #include <iostream>
 #include <string>
+#include <typeinfo>
 #include <boost/describe.hpp>
 #include <boost/mp11.hpp>
 
 BOOST_DESCRIBE_STRUCT(ConfigWindow::WindowSettings, (), (title, width, height, flags))
 
-static const std::string WindowsSectionName("window");
 
 ConfigWindow::ConfigWindow(const std::string &filepath)
     : BaseConfiguration(filepath)
@@ -31,7 +31,7 @@ ErrorClass::Errors ConfigWindow::load()
     boost::mp11::mp_for_each<boost::describe::describe_members<WindowSettings,
                                                                boost::describe::mod_public>>([this](auto D)
     {
-        _ws.*D.pointer = (*GetParsedJson())[WindowsSectionName][D.name];
+        _ws.*D.pointer = (*GetParsedJson())[typeid(ConfigWindow::WindowSettings).name()][D.name];
     });
 
     return ErrorClass::Errors::DRACO2D_NO_ERROR;
