@@ -16,6 +16,14 @@ void Triangle::render(SDL_Renderer* renderer) const
 
 void Triangle::update()
 {
+    const bool* state = SDL_GetKeyboardState(NULL);
+    _vx = 0;
+    _vy = 0;
+    if (state[SDL_SCANCODE_UP]) _vy = -2.0f;
+    if (state[SDL_SCANCODE_DOWN]) _vy = 2.0f;
+    if (state[SDL_SCANCODE_LEFT]) _vx = -2.0f;
+    if (state[SDL_SCANCODE_RIGHT]) _vx = 2.0f;
+
     // Update positions
     _bounding_box.x += _vx;
     _bounding_box.y += _vy;
