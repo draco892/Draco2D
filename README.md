@@ -7,7 +7,7 @@ A clean and modular 2D rendering engine built for educational purposes.
 - **Core Engine**: Built using SDL3 and C++20.
 - **Window Management**: Support for window creation, resizing, and standard window management.
 - **2D Renderer**: A straightforward rendering loop for basic graphics.
-- **Geometric Shapes**: Built-in support for Triangles, Squares, and Rectangles.
+- **Geometric Shapes**: Built-in support for Triangles, Squares, and Rectangles (currently featuring keyboard-controllable triangles).
 - **Robust Error Handling**: A centralized system for error reporting and tracking.
 - **Configurable Systems**: Easy-to-use configuration system for engine parameters.
 
@@ -130,3 +130,6 @@ cmake --build <build-directory> --config Debug
 - Keep source files under version control and ignore generated build directories (e.g. `build/`, `build-xcode/`).
 - Use CMake as the single source of truth for the build configuration.
 - Ensure `CMAKE_PREFIX_PATH` is correctly set for SDL3 to avoid detection issues.
+
+## Controls
+- **Arrow Keys**: Move the triangle (Up, Down, Left, Right).
