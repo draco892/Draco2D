@@ -1,30 +1,18 @@
 #pragma once
-#ifndef DRACO2D_BASE_BASEOBJECT_H
-#define DRACO2D_BASE_BASEOBJECT_H
 #include <SDL3/SDL.h>
+
+struct UpdateContext
+{
+    float seconds;
+    float width;
+    float height;
+    const bool* keyboard;
+};
 
 class BaseObject
 {
 public:
-    /**
-     * @brief Virtual destructor to allow proper cleanup of derived objects.
-     */
     virtual ~BaseObject() = default;
-    
-    /**
-     * @brief Virtual update method for object logic.
-     *
-     * Should be called once per frame.
-     */
-    virtual void update() = 0;
-
-    /**
-     * @brief Pure virtual function for rendering the object.
-     *
-     * Must be implemented by derived classes.
-     *
-     * @param renderer The SDL_Renderer to render onto.
-     */
+    virtual void update(const UpdateContext& context) = 0;
     virtual void render(SDL_Renderer* renderer) const = 0;
 };
-#endif  // !DRACO2D_BASE_BASEOBJECT_H

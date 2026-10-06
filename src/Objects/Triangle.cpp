@@ -1,45 +1,32 @@
-#include "../include/Objects/Triangle.hpp"
-#include "../include/Base/BaseColor.hpp"
+#include "Objects/Triangle.hpp"
+#include <algorithm>
+#include <cmath>
 
-const int points(4);
+Triangle::Triangle(const TriangleSettings& settings, const InputSettings& input)
+    : _bounds(settings.bounds), _color(settings.color), _speed(settings.speed), _input(input)
+{}
 
-// Render the triangle outline.
 void Triangle::render(SDL_Renderer* renderer) const
 {
-    SDL_SetRenderDrawColor(renderer,
-                            Draco2D::Base::red.r,
-                            Draco2D::Base::red.g,
-                            Draco2D::Base::red.b,
-                            Draco2D::Base::red.a);
-    SDL_RenderLines(renderer, _vertices, points);
+    const SDL_FPoint top{_bounds.x + _bounds.w / 2, _bounds.y};
+    const SDL_FPoint vertices[]{top, {_bounds.x, _bounds.y + _bounds.h},
+                               {_bounds.x + _bounds.w, _bounds.y + _bounds.h}, top};
+    SDL_SetRenderDrawColor(renderer, _color.r, _color.g, _color.b, _color.a);
+    SDL_RenderLines(renderer, vertices, 4);
 }
 
-void Triangle::update()
+void Triangle::update(const UpdateContext& context)
 {
-    const bool* state = SDL_GetKeyboardState(NULL);
-    _vx = 0;
-    _vy = 0;
-    if (state[SDL_SCANCODE_UP]) _vy = -2.0f;
-    if (state[SDL_SCANCODE_DOWN]) _vy = 2.0f;
-    if (state[SDL_SCANCODE_LEFT]) _vx = -2.0f;
-    if (state[SDL_SCANCODE_RIGHT]) _vx = 2.0f;
-
-    // Update positions
-    _bounding_box.x += _vx;
-    _bounding_box.y += _vy;
-
-    for (int i = 0; i < 4; ++i) {
-        _vertices[i].x += _vx;
-        _vertices[i].y += _vy;
+    float dx = 0, dy = 0;
+    if (context.keyboard) {
+        dx = static_cast<float>(context.keyboard[_input.right]) - context.keyboard[_input.left];
+        dy = static_cast<float>(context.keyboard[_input.down]) - context.keyboard[_input.up];
     }
-
-    // Simple bouncing logic for 1280x720
-    if (_bounding_box.x < 0 || _bounding_box.x + _bounding_box.w > 1280)
-    {
-        _vx = -_vx;
+    const float length = std::sqrt(dx * dx + dy * dy);
+    if (length > 0) {
+        _bounds.x += dx / length * _speed * context.seconds;
+        _bounds.y += dy / length * _speed * context.seconds;
     }
-    if (_bounding_box.y < 0 || _bounding_box.y + _bounding_box.h > 720)
-    {
-        _vy = -_vy;
-    }
+    _bounds.x = std::clamp(_bounds.x, 0.0f, std::max(0.0f, context.width - _bounds.w));
+    _bounds.y = std::clamp(_bounds.y, 0.0f, std::max(0.0f, context.height - _bounds.h));
 }

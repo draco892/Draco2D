@@ -1,16 +1,52 @@
 {
-    "WindowSettings": 
-    {
+    "WindowSettings": {
         "title": "Draco2D Engine",
         "width": 1280,
         "height": 720,
         "flags": "RESIZABLE"
     },
-    "GraphicsSettings":
-    {
+    "GraphicsSettings": {
         "vsync": true,
         "default_color_r": 18,
         "default_color_g": 18,
-        "default_color_b": 24
+        "default_color_b": 24,
+        "default_color_a": 255
+    },
+    "ApplicationSettings": {
+        "max_fps": 120
+    },
+    "InputSettings": {
+        "up": "Up",
+        "down": "Down",
+        "left": "Left",
+        "right": "Right",
+        "quit": "Escape"
+    },
+    "Objects": {
+        "triangle": {
+            "x": 240,
+            "y": 100,
+            "width": 800,
+            "height": 420,
+            "color": { "r": 255, "g": 0, "b": 0, "a": 255 },
+            "speed": 120
+        },
+        "square": {
+            "x": 540,
+            "y": 260,
+            "size": 200,
+            "color": { "r": 0, "g": 255, "b": 0, "a": 255 },
+            "vx": 120,
+            "vy": 120
+        },
+        "rectangle": {
+            "x": 470,
+            "y": 285,
+            "width": 300,
+            "height": 150,
+            "color": { "r": 0, "g": 0, "b": 255, "a": 255 },
+            "vx": 120,
+            "vy": 120
+        }
     }
 }

@@ -70,3 +70,6 @@ xcuserdata/
 
 # qtCreator
 .qtcreator/
+
+# test dir
+tests/

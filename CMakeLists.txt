@@ -77,31 +77,12 @@ if(NOT nlohmann_json_FOUND)
 endif()
 # ------------------------------------------------------------ nlohmann/json end
 
-# ------------------------------------------------------------
-# Boost
-# ------------------------------------------------------------
-if(DRACO2D_PREFER_SYSTEM_DEPS)
-    find_package(Boost CONFIG QUIET)
-endif()
-
-if(NOT Boost_FOUND)
-    message(STATUS "Boost not found on system, fetching via Content...")
-    FetchContent_Declare(
-        boost
-        GIT_REPOSITORY https://github.com/boostorg/boost.git
-        GIT_TAG boost-1.85.0
-    )
-    FetchContent_MakeAvailable(boost)
-endif()
-# ------------------------------------------------------------ Boost end
-
 # Source files used to build the executable target.
 set(SOURCES
-    src/main.cpp
     # Application
-    src//Application/Application.cpp
+    src/Application/Application.cpp
     # Window
-    src//Window/Window.cpp
+    src/Window/Window.cpp
     src/Window/ConfigWindow.cpp
     # Render
     src/Render/Renderer2D.cpp
@@ -145,30 +126,32 @@ set(HEADERS
 )
 
 # Create the main executable target.
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+add_library(Draco2DCore STATIC ${SOURCES} ${HEADERS})
+add_executable(${PROJECT_NAME} src/main.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE Draco2DCore)
 
 # Add the local include directory so project headers can be found.
-target_include_directories(${PROJECT_NAME} PRIVATE include)
+target_include_directories(Draco2DCore PUBLIC include)
 
 # Explicitly require C++23 support for this target.
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
+target_compile_features(Draco2DCore PUBLIC cxx_std_23)
 
 # Link third-party dependencies through their official CMake targets.
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(Draco2DCore PUBLIC
     SDL3::SDL3
     nlohmann_json::nlohmann_json
 )
 
 # Define debug-only preprocessor symbols.
-target_compile_definitions(${PROJECT_NAME} PRIVATE
+target_compile_definitions(Draco2DCore PUBLIC
     $<$<CONFIG:Debug>:D2D_DEBUG=1>
 )
 
 # Enable a stricter warning level depending on the compiler.
 if(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /permissive-)
+    target_compile_options(Draco2DCore PRIVATE /W4 /permissive-)
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(Draco2DCore PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 # Set the final output binary name.
@@ -199,4 +182,32 @@ elseif(MSVC)
             "${CMAKE_CXX_COMPILER_VERSION}"
         )
     endif()
+endif()
+
+add_custom_command(TARGET Draco2D POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/Draco2DConfig.json"
+        "$<TARGET_FILE_DIR:Draco2D>/Draco2DConfig.json"
+    VERBATIM
+)
+
+# Keep an editable runtime configuration beside single- and multi-config binaries.
+# This target runs even when only the JSON file changed.
+add_custom_target(Draco2DConfig ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/Draco2DConfig.json"
+        "$<TARGET_FILE_DIR:Draco2D>/Draco2DConfig.json"
+    DEPENDS Draco2D
+    VERBATIM
+)
+
+include(CTest)
+if(BUILD_TESTING)
+    add_executable(Draco2DTests tests/ConfigurationTests.cpp)
+    target_link_libraries(Draco2DTests PRIVATE Draco2DCore)
+    add_test(NAME configuration_and_runtime COMMAND Draco2DTests
+        "${CMAKE_CURRENT_SOURCE_DIR}/Draco2DConfig.json")
+    set_tests_properties(configuration_and_runtime PROPERTIES
+        ENVIRONMENT "SDL_VIDEODRIVER=dummy"
+        TIMEOUT 15)
 endif()
