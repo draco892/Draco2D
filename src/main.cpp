@@ -4,6 +4,8 @@
 
 int main(int argc, char* argv[])
 {
+    // Amo il mio gechino <3
+
     if (argc > 2) {
         std::cerr << "Usage: Draco2D [path/to/config.json]\n";
         return 1;
