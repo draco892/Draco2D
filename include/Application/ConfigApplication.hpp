@@ -1,13 +1,7 @@
 #pragma once
-#pragma once
-#ifndef DRACO2D_CONFIG_WINDOW_H
-#define DRACO2D_CONFIG_WINDOW_H
 
-class ConfigApplication
+// Movement uses pixels per second; this cap also applies when VSync is unavailable.
+struct ConfigApplication
 {
-public:
-    ConfigApplication()
-    {}
+    int maxFps = 120;
 };
-
-#endif  // !DRACO2D_CONFIG_WINDOW_H

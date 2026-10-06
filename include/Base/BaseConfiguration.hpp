@@ -11,7 +11,7 @@ class BaseConfiguration : public BaseFile
     /**
      * @brief the parsed json
      */
-    const nlohmann::json _jsonP;
+    nlohmann::json _jsonP;
 
 public:
     /**

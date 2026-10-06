@@ -1,119 +1,96 @@
-#include "../include/Application/Application.hpp"
-#include "../include/Base/ErrorClass.hpp"
-
-#include "../include/Objects/Rectangle.hpp"
-#include "../include/Objects/Square.hpp"
-#include "../include/Objects/Triangle.hpp"
-
+#include "Application/Application.hpp"
+#include "Objects/Rectangle.hpp"
+#include "Objects/Square.hpp"
+#include "Objects/Triangle.hpp"
+#include <algorithm>
 #include <iostream>
 
-Application::Application(const std::string &title,
-                         const int w,
-                         const int h,
-                         const SDL_WindowFlags flags)
-: _window(title, w, h, flags)
-, _renderer(_window.getWindow())
-, _running(true)
+Application::Application(const EngineConfig& settings) : _settings(settings)
 {
-    if (!SDL_Init(SDL_INIT_VIDEO))
-    {
-        std::cerr << ErrorDescription(Errors::DRACO2D_SDL_INIT_FAILED_ERROR)
-                  << ": " << SDL_GetError() << std::endl;
-        _running = false; // Signal failure
-        return;
-    }
-  
-    if (!Initialize())
-    {
-        std::cerr << ErrorDescription(Errors::DRACO2D_CANNOT_INITIALIZE_APPLICATION)
-                  << std::endl;
+    try {
+        _running = Initialize();
+    } catch (...) {
         Cleanup();
-        _running = false;
+        throw;
+    }
+    if (!_running) {
+        std::cerr << getLastErrorMessage() << ": " << SDL_GetError() << '\n';
+        Cleanup();
     }
 }
 
-Application::~Application()
-{
-    Cleanup();
-}
+Application::~Application() { Cleanup(); }
 
 bool Application::Initialize()
 {
-    // Init SDL check
-    if (!SDL_Init(SDL_INIT_VIDEO))
-    {
-        std::cerr << ErrorDescription(Errors::DRACO2D_SDL_INIT_FAILED_ERROR)
-                  <<": " << SDL_GetError() << '\n';
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        setLastError(Errors::DRACO2D_SDL_INIT_FAILED_ERROR);
         return false;
     }
-    
-    // Check if window was created successfully
-    if (!_window.getWindow())
-    {
-        std::cerr << ErrorDescription(Errors::DRACO2D_SDL_CREATE_WINDOW_FAIL_ERROR)
-                  <<": " << SDL_GetError() << '\n';
+    _sdlInitialized = true;
+    const auto& w = _settings.window;
+    _window = std::make_unique<Window>(w.title, w.width, w.height, w.flags);
+    if (!_window->getWindow()) {
+        setLastError(Errors::DRACO2D_SDL_CREATE_WINDOW_FAIL_ERROR);
         return false;
     }
-    
-    // Check if renderer was created successfully
-    if (!_renderer.getRenderer())
-    {
-        std::cerr << ErrorDescription(Errors::DRACO2D_SDL_CREATE_RENDER_FAIL_ERROR)
-                  << ": " << SDL_GetError() << '\n';
+    _renderer = std::make_unique<Renderer2D>(_window->getWindow());
+    if (!_renderer->getRenderer()) {
+        setLastError(Errors::DRACO2D_SDL_CREATE_RENDER_FAIL_ERROR);
         return false;
     }
-    
-    _objects.emplace_back(std::make_unique<Triangle>());
-    _objects.emplace_back(std::make_unique<Square>());
-    _objects.emplace_back(std::make_unique<Rectangle>());
-    
+    auto* renderer = _renderer->getRenderer();
+    if (!SDL_SetRenderVSync(renderer, _settings.graphics.vsync ? 1 : 0))
+        std::cerr << "Requested VSync is unavailable; using max_fps: " << SDL_GetError() << '\n';
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    _objects.emplace_back(std::make_unique<Triangle>(_settings.triangle, _settings.input));
+    _objects.emplace_back(std::make_unique<Square>(_settings.square));
+    _objects.emplace_back(std::make_unique<Rectangle>(_settings.rectangle));
     return true;
 }
 
 void Application::Cleanup()
 {
-    // 1. Destroy resources owned by the application
-    SDL_DestroyRenderer(_renderer.getRenderer());
-    SDL_DestroyWindow(_window.getWindow());
-  
-    // 2. Quit SDL only once, here.
-    SDL_Quit();
-}
-
-void Application::Update()
-{
-    for (const auto& obj : _objects) {
-        obj->update();
-    }
-}
-
-// Renders all drawable objects
-void Application::Render(SDL_Renderer* renderer)
-{
-    for (const auto& obj : _objects) {
-        obj->render(renderer); // Call render method of each object
-    }
+    _running = false;
+    _objects.clear();
+    _renderer.reset();
+    _window.reset();
+    if (_sdlInitialized) { SDL_Quit(); _sdlInitialized = false; }
 }
 
 int Application::run()
 {
+    Uint64 previous = SDL_GetTicksNS();
+    const Uint64 frameDuration = 1000000000ULL / _settings.application.maxFps;
     while (_running) {
-        while (SDL_PollEvent(&_event)) {
-            if (_event.type == SDL_EventType::SDL_EVENT_QUIT)
-            {
+        const Uint64 start = SDL_GetTicksNS();
+        // Avoid large jumps after a pause or while dragging/resizing the window.
+        const float seconds = std::min(static_cast<float>(start - previous) / 1.0e9f, 0.05f);
+        previous = start;
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_EVENT_QUIT ||
+                (event.type == SDL_EVENT_KEY_DOWN && event.key.scancode == _settings.input.quit))
                 _running = false;
-            }
         }
-    
-        // Rendering logic
-        SDL_SetRenderDrawColor(_renderer.getRenderer(), 18, 18, 24, 255);
-        SDL_RenderClear(_renderer.getRenderer());
-    
-        Update();
-        Render(_renderer.getRenderer()); // Render all objects
-    
-        SDL_RenderPresent(_renderer.getRenderer());
+        if (!_running) break;
+        auto* renderer = _renderer->getRenderer();
+        int width = 0, height = 0;
+        if (!SDL_GetRenderOutputSize(renderer, &width, &height)) {
+            setLastError(Errors::DRACO2D_CANNOT_INITIALIZE_APPLICATION);
+            std::cerr << "Cannot determine render dimensions: " << SDL_GetError() << '\n';
+            break;
+        }
+        const UpdateContext context{seconds, static_cast<float>(width), static_cast<float>(height),
+                                    SDL_GetKeyboardState(nullptr)};
+        for (const auto& object : _objects) object->update(context);
+        const auto& color = _settings.graphics.background;
+        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        SDL_RenderClear(renderer);
+        for (const auto& object : _objects) object->render(renderer);
+        SDL_RenderPresent(renderer);
+        const Uint64 elapsed = SDL_GetTicksNS() - start;
+        if (elapsed < frameDuration) SDL_DelayNS(frameDuration - elapsed);
     }
-    
-    return static_cast<int>(ErrorClass::Errors::DRACO2D_NO_ERROR);
+    return static_cast<int>(getLastError());
 }

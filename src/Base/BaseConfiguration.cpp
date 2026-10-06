@@ -1,14 +1,19 @@
-#include "../include/Base/BaseConfiguration.hpp"
+#include "Base/BaseConfiguration.hpp"
 
-#include <filesystem>
-
-BaseConfiguration::BaseConfiguration(const std::filesystem::path &filepath)
-    : BaseFile(filepath, BaseFile::FileAccessMode::READ)
-    , _jsonP(nlohmann::json::parse(*BaseFile::GetReadFile()))
-{}
-
+BaseConfiguration::BaseConfiguration(const std::filesystem::path& filepath)
+    : BaseFile(filepath, FileAccessMode::READ)
+{
+    if (!IsValid()) return;
+    try {
+        _jsonP = nlohmann::json::parse(*GetReadFile());
+    } catch (const nlohmann::json::exception& error) {
+        setIsValid(false);
+        setLastError(Errors::DRACO2D_CONFIG_BAD_PARAMETERS);
+        setLastCustomErrorMessage(filepath.string() + ": " + error.what());
+    }
+}
 
 const nlohmann::json* BaseConfiguration::GetParsedJson() const
 {
-    return &_jsonP;
+    return IsValid() ? &_jsonP : nullptr;
 }

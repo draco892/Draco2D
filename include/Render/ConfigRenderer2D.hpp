@@ -1,12 +1,8 @@
 #pragma once
-#ifndef DRACO2D_CONFIG_RENDERER_H
-#define DRACO2D_CONFIG_RENDERER_H
+#include <SDL3/SDL_pixels.h>
 
-class ConfigRenderer2D
+struct ConfigRenderer2D
 {
-public:
-    ConfigRenderer2D()
-    {}
+    bool vsync = true;
+    SDL_Color background{18, 18, 24, 255};
 };
-
-#endif  // !DRACO2D_CONFIG_RENDERER_H

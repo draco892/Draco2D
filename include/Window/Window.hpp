@@ -22,6 +22,9 @@ class Window
     SDL_Window* _window;
 
 public:
+    Window(const Window&) = delete;
+    Window& operator=(const Window&) = delete;
+
     /**
      * @brief Creates a new SDL window.
      *
