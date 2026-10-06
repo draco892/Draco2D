@@ -21,6 +21,9 @@ class Renderer2D
     SDL_Renderer* _renderer;
 
 public:
+    Renderer2D(const Renderer2D&) = delete;
+    Renderer2D& operator=(const Renderer2D&) = delete;
+
     /**
      * @brief Creates a new SDL renderer for the given window.
      *

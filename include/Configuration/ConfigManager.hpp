@@ -1,91 +1,65 @@
 #pragma once
-#ifndef DRACO2D_CONFIGMANAGER_H
-#define DRACO2D_CONFIGMANAGER_H
 
-#include "Base/ErrorClass.hpp"
-#include "../Application/ConfigApplication.hpp"
-#include "../Render/ConfigRenderer2D.hpp"
-#include "../Window/ConfigWindow.hpp"
+#include "Base/BaseConfiguration.hpp"
+#include "Application/ConfigApplication.hpp"
+#include "Render/ConfigRenderer2D.hpp"
+#include <SDL3/SDL.h>
 
-#include <string>
-
-class ConfigManager : public ErrorClass
+struct WindowSettings
 {
-    /**
-     * @brief Internal structure to hold window configuration data.
-     */
-    struct WindowSettings
-    {
-        std::string title;
-        int width;
-        int height;
-        std::string flags;
-    };
-
-    /**
-     * @brief Internal structure to hold window graphics data.
-     */
-    struct GraphicsConfig {
-        bool vsync;
-        unsigned char default_color_r;
-        unsigned char default_color_g;
-        unsigned char default_color_b;
-    };
-
-    /**
-     * @brief Internal structure to hold Draco2D general configuration data.
-     */
-    struct Draco2DConfig {
-        WindowSettings window;
-        GraphicsConfig graphics;
-    };
-
-
-    /**
-     * @brief Stores the loaded window settings.
-     */
-    WindowSettings _window;
-
-    /**
-     * @brief Json configuration filepath
-     */
-    const std::string _filepath;
-
-    /**
-     * @brief Json configuration filepath
-     */
-    bool _isValid;
-
-public:
-    /**
-     * @brief Default constructor. Initializes settings to default values.
-     */
-    explicit ConfigManager(const std::string &filepath );
-
-    /**
-     * @brief Attempts to load and parse configuration settings from a JSON file.
-     *
-     * @return True if loading and parsing were successful, false otherwise.
-     */
-    bool load();
-
-    /**
-     * @brief Retrieves the currently loaded window settings.
-     * @return A const reference to the WindowSettings struct.
-     */
-    const WindowSettings& getWindowSettings() const
-    {
-        return _window;
-    }
-
-    /**
-     * @brief Retrieves the currently isValid value
-     * @return isValid bool value
-     */
-    bool isValid() const
-    {
-        return _isValid;
-    }
+    std::string title = "Draco2D Engine";
+    int width = 1280;
+    int height = 720;
+    SDL_WindowFlags flags = SDL_WINDOW_RESIZABLE;
 };
 
-#endif // !DRACO2D_CONFIGMANAGER_H
+struct InputSettings
+{
+    SDL_Scancode up = SDL_SCANCODE_UP;
+    SDL_Scancode down = SDL_SCANCODE_DOWN;
+    SDL_Scancode left = SDL_SCANCODE_LEFT;
+    SDL_Scancode right = SDL_SCANCODE_RIGHT;
+    SDL_Scancode quit = SDL_SCANCODE_ESCAPE;
+};
+
+struct TriangleSettings
+{
+    SDL_FRect bounds{240, 100, 800, 420};
+    SDL_Color color{255, 0, 0, 255};
+    float speed = 120;
+};
+
+struct RectangleSettings
+{
+    SDL_FRect bounds{470, 285, 300, 150};
+    SDL_Color color{0, 0, 255, 255};
+    float vx = 120;
+    float vy = 120;
+};
+
+struct EngineConfig
+{
+    WindowSettings window;
+    ConfigApplication application;
+    ConfigRenderer2D graphics;
+    InputSettings input;
+    TriangleSettings triangle;
+    RectangleSettings square{{540, 260, 200, 200}, {0, 255, 0, 255}, 120, 120};
+    RectangleSettings rectangle;
+};
+
+class ConfigManager : public BaseConfiguration
+{
+public:
+    explicit ConfigManager(const std::filesystem::path& filepath);
+    Errors load() override;
+    const EngineConfig& settings() const { return _settings; }
+    const WindowSettings& getWindowSettings() const { return _settings.window; }
+    bool isValid() const { return IsValid(); }
+
+    // Missing fields keep defaults; invalid or unknown fields throw with a JSON path.
+    static EngineConfig Parse(const nlohmann::json& json);
+
+private:
+    EngineConfig _settings;
+};
